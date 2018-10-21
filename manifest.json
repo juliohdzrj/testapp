@@ -1,0 +1,36 @@
+{
+  "name": "Tarjeta SMB App",
+  "version": "0.0.3",
+  "default_locale": "es",
+  "description": "App de Tarjeta SMB. Usa Tarjeta SMB de una manera diferente, únete a través de nuestra Progressive Web App.",
+  "short_name": "TARJETA SMB",
+  "author": "Julio Ramos Hernandez",
+  "icons": [{
+    "src": "images/app-icon-32.png",
+    "type": "image/png",
+    "sizes": "32x32"
+  }, {
+    "src": "images/app-icon-128.png",
+    "sizes": "128x128",
+    "type": "image/png"
+  }, {
+    "src": "images/app-icon-144.png",
+    "sizes": "144x144",
+    "type": "image/png"
+  }, {
+    "src": "images/app-icon-192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  },{
+    "src": "images/app-icon-384.png",
+    "sizes": "384x384",
+    "type": "image/png"
+  }],
+  "start_url": "/index.html",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#cbddf2",
+  "theme_color": "rgb(52, 138, 238)",
+  "dir": "ltr"
+}

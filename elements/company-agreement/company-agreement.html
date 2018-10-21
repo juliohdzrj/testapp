@@ -1,0 +1,761 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/promise-polyfill/promise-polyfill-lite.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<!--link rel="import" href="../../bower_components/paper-autocomplete/paper-autocomplete.html"-->
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/app-layout/demo/sample-content.html">
+<link rel="import" href="../../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<!--link rel="import" href="../../bower_components/iron-list/iron-list.html"-->
+<!--link rel="import" href="../../bower_components/iron-scroll-threshold/iron-scroll-threshold.html"-->
+
+
+<dom-module id="company-agreement">
+    <template>
+        <custom-style>
+            <style is="custom-style">
+                :host {
+                    font-family: 'Roboto', 'Noto', sans-serif;
+                    font-size: 16px;
+                    /*--paper-toolbar-background:rgb(32, 98, 175);*/
+                }
+                div.backgroundpage{
+                    /*background-color: rgb(250, 250, 250);
+                    background-color:  rgb(245, 245, 245);*/
+                }
+                .flex-center-justified {
+                    @apply --layout-horizontal;
+                    @apply --layout-center-justified;
+                }
+                .flex-equal-justified {
+                    @apply --layout-horizontal;
+                    @apply --layout-justified;
+                }
+                .flex-wrap {
+                    @apply --layout-horizontal;
+                    @apply --layout-wrap;
+                }
+                .flex-horizontal {
+                    @apply --layout-horizontal;
+                }
+                .flexchild {
+                    @apply --layout-flex;
+                }
+                div.column_container{
+                    display: flex;
+                    width: 31%;
+                    padding: 0;
+                    margin-top: 3%;
+                    margin-bottom: 3%;
+                }
+                div.container{
+                    /*padding-left: 3%;
+                    padding-right: 3%;*/
+                    padding-top: 3%;
+                    /*padding-bottom: 3%;*/
+                }
+                div.container2{
+                    padding-left: 3%;
+                    padding-right: 3%;
+                    padding-bottom: 3%;
+                    /*background-color: rgb(245, 245, 245);
+                    background: linear-gradient(15deg, rgb(71, 149, 209) 50%, rgb(0, 110, 184) 50.1%);*/
+                }
+                div.title{
+                    font-size: 0.938em;
+                    font-weight: 500 !important;
+                    text-transform: uppercase !important;
+                }
+                paper-icon-button.moremenu{
+                    margin-top: -10px;
+                }
+                div.column_header{
+                    padding: 1%;
+                    color: rgb(83, 83, 83);
+                    /*background-color: rgb(32, 98, 175);
+                    color: ghostwhite;*/
+                }
+
+                paper-card.rate{
+                    margin-top:2.8%;
+                }
+
+                .header-title {
+                    font-weight: 500;
+                    color: rgb(83, 83, 83);
+                    font-size: 0.938em;
+                    text-align: center;
+                }
+                .blue-text{
+                    color:rgb(32, 98, 175);
+                }
+
+
+                @media (min-width: 425px) {
+                    paper-card.rate {
+                        width: 320px;
+                    }
+                }
+
+                @media (min-width: 768px){
+                    /*paper-card.rate{
+                        width:320px;
+                    }*/
+
+                    div.card-content {
+                        --paper-card-content: {
+                            padding-left: 6%;
+                            padding-right: 6%;
+                        }
+                    }
+                }
+
+                @media (max-width: 375px) {
+                    paper-card.rate {
+                        width: 100%;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    /* For mobile phones: */
+                    div.column_container{
+                        width: 44%;
+                    }
+                    /*paper-card.rate{
+                        width: 100%;
+                    }*/
+                    div.card-content {
+                        --paper-card-content: {
+                            padding-left: 5%;
+                            padding-right: 5%;
+                        }
+                    }
+                }
+
+                @media (min-width: 445px) {
+                    paper-autocomplete-suggestions {
+                        --suggestions-wrapper: {
+                            width: 93% !important;
+                        };
+                    }
+                }
+
+                @media (max-width: 445px) {
+                    /* For mobile phones: */
+                    div.column_container{
+                        text-align: center;
+                        width: 100%;
+                    }
+
+                    paper-card.imagespromotions{
+                        width: 90% !important;
+                    }
+
+                    paper-autocomplete-suggestions {
+                        --suggestions-wrapper: {
+                            width: 90% !important;
+                        };
+                    }
+                }
+
+
+
+            </style>
+            <style is="custom-style">
+                .containerpaperbage {
+                    display: inline-block;
+                    margin-top: 10px;
+                    padding-bottom: 10px;
+                }
+                /* Need to position the badge to look like a text superscript */
+                .containerpaperbage > paper-badge {
+                    --paper-badge-margin-left: 28px;
+                    --paper-badge-margin-bottom: 0px;
+                    --paper-badge-width:25px;
+                    --paper-badge-height:25px
+                }
+                .blue {
+                    /*--paper-badge-background: var(--paper-light-blue-300);*/
+                    --paper-badge-background:var(--paper-indigo-500);
+                }
+
+
+                .loadingIndicator {
+                    text-align: center;
+                    height: 40px;
+                    width: 100%;
+                }
+
+                paper-spinner {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 10px;
+                }
+                iron-list {
+                    flex: 1 1 auto;
+                }
+
+                paper-card.imagespromotions{
+                    width: 100%;
+                    margin-top: 6%;
+                    margin-bottom: 6%;
+                    background-color: white;
+                }
+                paper-card.imagespromotions{
+                    --paper-card-actions:{
+                        text-align: center;
+                        float: left;
+                        width: 100%;
+                        padding: 0;
+                        padding-bottom: 3%;
+                        padding-top: 3%;
+                    }
+                }
+
+                paper-card.imagespromotions{
+                    --paper-card-header:{
+                        width: 100px;
+                        float: left;
+                    }
+                }
+
+                paper-card.imagespromotions{
+                    --paper-card-content:{
+                        font-family: 'Roboto', 'Noto', sans-serif;
+                        font-size: 0.875em;
+                        text-align: center;
+                        font-weight: bold;
+                        text-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.3686274509803922);
+                    }
+                }
+
+                /*paper button pink*/
+                paper-button {
+                    font-family: 'Roboto', 'Noto', sans-serif;
+                    font-weight: normal;
+                    font-size: 14px;
+                    -webkit-font-smoothing: antialiased;
+                }
+                paper-button.pink {
+                    color: var(--paper-pink-a200);
+                    text-transform: none;
+                    --paper-button-ink-color: var(--paper-pink-a200);
+                }
+                iron-icon.margin_icon_header{
+                    margin-top: -5px;
+                }
+                /*paper-button.pink:hover {
+                    background-color: var(--paper-pink-100);
+                }*/
+                /*End paper button pink*/
+            </style>
+            <style is="custom-style">
+                paper-button.custom {
+                    --paper-button-ink-color: var(--paper-pink-a200);
+                    /* These could also be individually defined for each of the
+                      specific css classes, but we'll just do it once as an example */
+                    --paper-button-flat-keyboard-focus: {
+                        background-color: var(--paper-pink-a200);
+                        color: white !important;
+                    };
+                    --paper-button-raised-keyboard-focus: {
+                        background-color: var(--paper-pink-a200) !important;
+                        color: white !important;
+                    };
+                }
+                paper-button.custom:hover {
+                    background-color: var(--paper-indigo-100);
+                }
+                paper-button.pink {
+                    color: var(--paper-pink-a200);
+                    text-align: center;
+                }
+                paper-button.indigo {
+                    background-color: var(--paper-indigo-500);
+                    color: white;
+                    --paper-button-raised-keyboard-focus: {
+                        background-color: var(--paper-pink-a200) !important;
+                        color: white !important;
+                    };
+                }
+                paper-button.green {
+                    background-color: var(--paper-green-500);
+                    color: white;
+                }
+                paper-button.green[active] {
+                    background-color: var(--paper-red-500);
+                }
+                paper-button.disabled {
+                    color: white;
+                }
+            </style>
+
+            <style is="custom-style">
+                .column_container paper-card{
+                    width: 100%;
+                    margin: 0 auto;
+                }
+                .rate-image {
+                    position: relative;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: 100%;
+                    height: 100px;
+                    padding-top: 3%;
+                    padding-bottom: 3%;
+                    background-size: 100px 100px;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                }
+                .rate-header { @apply --paper-font-headline; }
+                .rate-name { color: var(--paper-grey-600); margin: 10px 0; }
+                paper-icon-button.rate-icon {
+                    --iron-icon-fill-color: white;
+                    --iron-icon-stroke-color: var(--paper-grey-600);
+                }
+                .layer {
+                    background: linear-gradient(141deg,rgba(68, 170, 255, 0.45) 30%, rgb(32, 137, 175) 75%);
+                    height: 100%;
+                    width: 100%;
+                    position: relative;
+                    opacity: 0.4;
+                    /* margin-top: -121px; */
+                    /* border-bottom: 1px solid rgb(128, 128, 128); */
+                    /* margin: -4%; */
+                    padding-bottom: 3%;
+                    padding-top: 3%;
+                    margin-top: -3%;
+                }
+                div.rate-header h2 {
+                    margin: 0;
+                    text-transform: uppercase;
+                    /*font-size: 90px;
+                    line-height: 50px;*/
+                    font-weight: 100;
+                    position: relative;
+                    color:#868383;
+                    font-size: 0.938em;
+                }
+
+                paper-card div.card-actions{
+                    /*padding-top: 8%;
+                    padding-bottom: 8%;
+                    text-align: center;
+                    font-weight: 500;*/
+                    padding-top: 1%;
+                    padding-bottom: 1%;
+                    color: #908e8e;
+                    font-size: 1em;
+                }
+
+                paper-card small{
+                    text-transform: uppercase;
+                    color:#908e8e;
+                }
+                paper-card a.linkcard{
+                    color:rgb(85, 178, 218);
+                }
+                span.msgerror{
+                    color: red;
+                }
+
+
+
+                iron-scroll-threshold{
+                    width:100%;
+                }
+                iron-list {
+                    /*padding-top: 64px;*/
+                    --iron-list-items-container: {
+                        max-width: 800px;
+                        margin: auto;
+                        /*margin-top: 60px;*/
+                        margin-bottom: 60px;
+                        border-bottom: 1px solid #ddd;
+                    };
+                }
+
+                .item {
+                    @apply --layout-horizontal;
+                    padding: 20px;
+                    background-color: white;
+                    border: 1px solid #ddd;
+                    /*cursor: pointer;*/
+                    margin-bottom: 10px;
+                }
+                .item hr{
+                    width: 100%;
+                }
+
+                .avatar {
+                    height: 40px;
+                    width: 40px;
+                    border-radius: 20px;
+                    box-sizing: border-box;
+                    background-color: #DDD;
+                }
+
+                .pad {
+                    padding: 0 16px;
+                    @apply --layout-flex;
+                    @apply --layout-vertical);
+                }
+
+                .primary {
+                    /*font-size: 16px;
+                    font-weight: bold;*/
+                    /*font-size: 0.875em;*/
+                    /*text-transform: uppercase;*/
+                    /*padding-bottom: 3%;*/
+                }
+
+                .shortText, .longText {
+                    font-size: 14px;
+                }
+
+                .longText {
+                    color: gray;
+                    /*display: none;*/
+                }
+                .actionArea{
+                    text-align: center;
+                }
+
+                /*.item:hover .shortText::after {
+                    content: ' [+]';
+                    color: gray;
+                }*/
+
+                /*.item.expanded:hover .shortText::after {
+                    content: '';
+                }*/
+
+                /*.item.expanded .longText {
+                    display: block;
+                }*/
+
+                /*.item.expanded:hover .longText::after {
+                    content: ' [–]';
+                }*/
+
+                .spacer {
+                    @apply --layout-flex;
+                }
+                .textNotes{
+                    font-size: 0.6875em;
+                    padding-right: 6%;
+                    padding-top: 20px;
+                }
+
+                div.contentActionForm{
+                    text-align: center;
+                    padding-top: 10px;
+                }
+                div.contentActionForm paper-button{
+                    padding-right: 35px;
+                }
+
+
+                @media (min-width: 461px) {
+                    .primary {
+                        font-weight: bold;
+                        font-size: 0.875em;
+                        padding-bottom:1%
+                    }
+                    .shortText, .longText {
+                        font-size: 0.813em;
+                    }
+                    .actionArea{
+                        padding-top: 1%;
+                    }
+                    .item paper-button{
+                        font-size: 0.813em;
+                        text-transform: none;
+                    }
+                }
+
+                @media (max-width: 460px) {
+                    paper-toolbar .bottom.title {
+                        font-size: 14px;
+                    }
+                    .primary {
+                        font-weight: bold;
+                        font-size: 0.750em;
+                    }
+                    .shortText, .longText {
+                        font-size: 0.750em;
+                    }
+                    .item paper-button{
+                        font-size: 0.875em;
+                        text-transform: none;
+                    }
+                }
+
+                @media (max-width: 320px) {
+                    .item{
+                        padding: 10px;
+                    }
+                }
+
+                @media (max-width: 424px) {
+                    .image-login {
+                        height: 222px;
+                    }
+                }
+
+                @media (min-width: 425px) {
+                    .image-login {
+                        height: 199px;
+                    }
+                }
+
+                .image-login{
+                    background-image: url("../../images/familia-smb.jpg");
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    width: 100%;
+                }
+
+                div.content-link{
+                    text-align: center;
+                }
+
+                p.text-align-center{
+                    text-align: center;
+                }
+
+                .text-color-gray{
+                    color:gray;
+                }
+                div.content-link p{
+                    padding: 0;
+                    margin: 0;
+                }
+
+            </style>
+
+        </custom-style>
+        <!--iron-ajax
+                id="requestSearchMedicList"
+                handle-as="json"
+                loading="{{loadingPredictionList}}"
+                on-response="_didRespondSearch"
+                debounce-duration="300"
+                verbose="true"
+                on-error="_showErrorSearch"
+        >
+        </iron-ajax-->
+
+        <div class="container backgroundpage">
+            <div class="flex-horizontal">
+                <div class="column_header" style="padding-left:3%"><iron-icon class="margin_icon_header" icon="label"></iron-icon></div>
+                <div class="column_header  flexchild"><div class="title">Registro convenio empresas</div></div>
+                <div class="column_header" style="padding-right:3%">
+                    <!--listcommercial-category listcategory="{{listcategorycommercial}}"></listcommercial-category-->
+                </div>
+            </div>
+        </div>
+
+        <div class="container2 backgroundpage">
+            <div class="flex-center-justified">
+                <paper-card class="rate">
+                    <div class="card-content">
+                        <h1 class="header-title">Busca tu empresa y regístrate.</h1>
+                        <p class="text-align-center text-color-gray">
+                            Si no encuentras el nombre de tu empresa comunícate a consultel <br>55-3036-1191 (Whatsapp)
+                            <br><span class="blue-text">Membresía SMB</span>
+                        </p>
+
+                        <iron-form id="form4">
+                            <form action="/foo" method="get">
+
+                                <!--paper-dropdown-menu class="custom" label="Especialidad" on-iron-select="_getSelectSpecialty">
+                                    <paper-listbox slot="dropdown-content" class="dropdown-content">
+                                        <template is="dom-repeat" items="{{itemSpecialty}}" as="specialty">
+                                            <paper-item value="[[specialty.idSpecialty]]">[[specialty.nameSpecialty]]</paper-item>
+                                        </template>
+                                    </paper-listbox>
+                                </paper-dropdown-menu-->
+
+                                <paper-dropdown-menu label="Empresa" name="empresa" required>
+                                    <paper-listbox class="dropdown-content" slot="dropdown-content">
+                                        <paper-item value="volvo">Empresa 1</paper-item>
+                                        <paper-item value="saab">Empresa 2</paper-item>
+                                        <paper-item value="fiat">Empresa 3</paper-item>
+                                        <paper-item value="audi">Empresa n</paper-item>
+                                    </paper-listbox>
+                                </paper-dropdown-menu>
+
+
+
+                                <paper-input name="email" label="Coloca tu email corporativo" required auto-validate></paper-input>
+                                <paper-input name="name" label="Nombre" required auto-validate></paper-input>
+                                <paper-input name="lastName" label="Apellidos" required auto-validate></paper-input>
+                                <paper-input name="nameUser" label="Nombre de usuario" required auto-validate></paper-input>
+                                <paper-input name="pass" label="Contraseña" type="password" required></paper-input>
+                                <paper-input name="passr" label="Repetir contraseña" type="password" required></paper-input>
+                                <paper-checkbox class="textNotes" name="read" required>Al continuar, aceptas las <b>Condiciones del servicio y la Política de privacidad</b> de Membresía SMB.</paper-checkbox><br>
+                                <div class="contentActionForm">
+                                    <paper-button raised on-tap="_delayedSubmit" disabled id="form4Submit">
+                                        <paper-spinner id="spinner" hidden></paper-spinner>Continuar
+                                    </paper-button>
+                                </div>
+                            </form>
+                            <div class="output"></div>
+                        </iron-form>
+
+                        <div class="content-link">
+                            <br><br>
+                            <p class="text-color-gray">Registrarse</p><a href="https://app.servicioshuman.mx/registrar-usuario"><paper-button class="pink">Crea una cuenta personal</paper-button></a>
+                            <br><br>
+                            <p class="text-color-gray">¿Ya tienes una cuenta?</p> <a href="https://app.servicioshuman.mx/iniciar-session"><paper-button class="pink">Iniciar sesión</paper-button></a>
+                        </div>
+
+
+
+                        <!--paper-icon-button style="float:right; color: rgb(32, 98, 175)" slot="suffix" icon="icons:search" alt="Buscar" title="clear" on-tap="_getInputSearchTap">
+                        </paper-icon-button>
+                        <paper-input value="{{valInputSearch}}" label="Haz una búsqueda" id="inputWithButton" on-keyup="_getInputSearch" no-label-float auto-validate pattern="([áéíóúÁÉÍÓÚñÑÜüa-zA-z0-9\s]{0,50})" error-message="¡Solo letras!">
+                        </paper-input>
+                        <span id="msgerrorsearch" class="msgerror">&nbsp</span-->
+                        </div>
+
+                    <!--div class="card-actions">
+                        <paper-button class="urlCurrentCupon pink" on-tap="_changeValue">Change edo</paper-button>
+                    </div-->
+                    <!--div class="image-login">
+
+                    </div-->
+                </paper-card>
+            </div>
+            <!--div class="loadingIndicator">
+                <paper-spinner active="[[loadingPredictionList]]"></paper-spinner>
+            </div-->
+        </div>
+    </template>
+    <script>
+        class CompanyAgreement extends Polymer.Element{
+            static get is(){ return 'company-agreement' }
+            static get properties(){
+                return{
+                    edoLog:{
+                        type: String,
+                        notify:true
+                    },
+                    headersCustom: {
+                        type: Object,
+                        computed: '_getHeaders(customHeader)'
+                    },
+                    customHeader: {
+                        value: '35f13ff714ce50c37baccead2e5a90c5='
+                    },
+                    cachecontrol: {
+                        value: 'no-cache,no-store'
+                    }
+                }
+            }
+            ready(){
+                super.ready();
+                console.log(this.edoLog);
+                const form=this.$.form4;
+                const form4Submit=this.$.form4Submit;
+                const spinner=this.$.spinner;
+                form.addEventListener('iron-form-submit', function(event) {
+                    this.querySelector('.output').innerHTML=JSON.stringify(event.detail);
+                    spinner.active = false;
+                    spinner.hidden = true;
+                    form4Submit.disabled = false;
+                });
+                form.addEventListener('change', function(event) {
+                    // Validate the entire form to see if we should enable the `Submit` button.
+                    form4Submit.disabled = !form.validate();
+                });
+
+
+            }
+            _delayedSubmit(event) {
+                var spinner=this.$.spinner;
+                var form4Submit=this.$.form4Submit;
+                var form=this.$.form4;
+                spinner.active = true;
+                spinner.hidden = false;
+                form4Submit.disabled = true;
+                // Simulate a slow server response.
+                setTimeout(function() {
+                    form.submit()
+                }, 1000);
+            }
+
+
+            /*_changeValue(){
+            this.edoLog="loginok";
+            console.log(this.edoLog);
+            }*/
+
+            _getHeaders(customHeader) {
+            return {'Accept': 'application/x-www-form-urlencoded','Authorization': this.customHeader,'cache-control': this.cachecontrol};
+            }
+            _errorInputSet(textError){
+                this.$.msgerrorsearch.textContent=textError;
+            }
+            _validateText(textInput){
+                var regularPhraseText=/^([áéíóúÁÉÍÓÚñÑÜüa-zA-z0-9\s]{3,3})+([áéíóúÁÉÍÓÚñÑÜüa-zA-z0-9\s]{0,50})$/;
+                if(regularPhraseText.test(textInput)){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            _getInputSearch(event){
+                this._errorInputSet("");
+                if (event.keyCode==13) {
+                    this.countPage=0;
+                    if(this.stopList===true){
+                        this.stopList=false;
+                    }
+                    this.$.listDirectory.set('items', []);
+                    this.$.scrollTheshold.clearTriggers();
+                    Polymer.dom.flush();
+                    if(this.valInputSearch.length<3){
+                        this._errorInputSet("Introduce más caracteres");
+                        return false;
+                    }
+                    if(this._validateText(this.valInputSearch)){
+                        this._searchText();
+                    }else{
+                        this._errorInputSet("No se permiten caracteres especiales");
+                    }
+                }
+            }
+            _getInputSearchTap(){
+                this.$.listDirectory.set('items', []);
+                this.countPage=0;
+                //this.$.scrollTheshold.clearTriggers();
+                if(this.stopList===true){
+                    this.stopList=false;
+                }
+                this._errorInputSet("");
+                    if(this.valInputSearch.length<3){
+                        this._errorInputSet("Introduce más caracteres");
+                        return false;
+                    }
+                    if(this._validateText(this.valInputSearch)){
+                        this._searchText();
+                    }else{
+                        this._errorInputSet("No se permiten caracteres especiales");
+                    }
+            }
+        }
+        window.customElements.define(CompanyAgreement.is, CompanyAgreement);
+    </script>
+</dom-module>

@@ -1,0 +1,327 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/promise-polyfill/promise-polyfill-lite.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-iconset-svg/iron-iconset-svg.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+
+<dom-module id="promotion-commerciallist">
+    <template>
+
+        <custom-style>
+            <style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+            <style is="custom-style">
+                :host {
+                    font-family: 'Roboto', 'Noto', sans-serif;
+                    font-size: 16px;
+                    /*--paper-toolbar-background:rgb(32, 98, 175);*/
+                }
+                div.backgroundpage{
+                    background-color: rgb(250, 250, 250)
+                }
+                .flex-equal-justified {
+                    @apply --layout-horizontal;
+                    @apply --layout-justified;
+                }
+                .flex-wrap {
+                    @apply --layout-horizontal;
+                    @apply --layout-wrap;
+                }
+                .flex-horizontal {
+                    @apply --layout-horizontal;
+                }
+                .flexchild {
+                    @apply --layout-flex;
+                }
+                div.column_container{
+                    width: 31%;
+                    padding: 0;
+                    margin-top: 3%;
+                }
+                div.container{
+                    /*padding-left: 3%;
+                    padding-right: 3%;*/
+                    padding-top: 3%;
+                    padding-bottom: 3%;
+                }
+                div.container2{
+                    padding-left: 3%;
+                    padding-right: 3%;
+                    padding-bottom: 3%;
+                    background: linear-gradient(15deg, rgb(71, 149, 209) 50%, rgb(0, 110, 184) 50.1%);
+                }
+                div.title{
+                    font-size: 1.188em;
+                    font-weight: 900;
+                    text-transform: uppercase;
+                }
+                div.column_header{
+                    padding: 1%;
+                    background-color: rgb(32, 98, 175);
+                    color: ghostwhite;
+                }
+                div.column_header_margin, iron-icon.column_header_margin{
+                    margin-top: 8px;
+                }
+                @media (max-width: 768px) {
+                    /* For mobile phones: */
+                    div.column_container{
+                        width: 44%;
+                    }
+                }
+                @media (max-width: 445px) {
+                    /* For mobile phones: */
+                    div.column_container{
+                        width: 100%;
+                    }
+                }
+
+            </style>
+            <style is="custom-style">
+                paper-card{
+                    width: 100%;
+                    background-color: #f5f5f5;
+                    cursor: pointer;
+                }
+                .cafe-header {
+                    /*@apply --paper-font-headline;*/
+                    font-weight: 900;
+                    text-transform: uppercase;
+                    color: #23211f;
+                    margin-bottom: 5px;
+                    font-size: 1.063em;
+                    text-align: center;
+                }
+                span.textbadge{
+                    color:rgb(71, 149, 209);
+                    font-weight: 900;
+                }
+                .cafe-light { color: var(--paper-grey-600); }
+                .cafe-location {
+                    float: right;
+                    font-size: 15px;
+                    vertical-align: middle;
+                }
+                .cafe-reserve { color: var(--google-blue-500); }
+                iron-icon.star {
+                    --iron-icon-width: 16px;
+                    --iron-icon-height: 16px;
+                    color: var(--paper-amber-500);
+                }
+                iron-icon.star:last-of-type { color: var(--paper-grey-500); }
+            </style>
+            <style is="custom-style">
+                .containerpaperbage {
+                    display: inline-block;
+                    margin-top: 10px;
+                    padding-bottom: 10px;
+                }
+                /* Need to position the badge to look like a text superscript */
+                .containerpaperbage > paper-badge {
+                    --paper-badge-margin-left: 28px;
+                    --paper-badge-margin-bottom: 0px;
+                    --paper-badge-width:25px;
+                            --paper-badge-height:25px
+                }
+                .blue {
+                    /*--paper-badge-background: var(--paper-light-blue-300);*/
+                    --paper-badge-background:var(--paper-indigo-500);
+                }
+
+
+                .loadingIndicator {
+                    text-align: center;
+                    height: 40px;
+                }
+
+                paper-spinner {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 10px;
+                }
+            </style>
+        </custom-style>
+{{dataLimitRequest}}
+        <!--iron-ajax
+                id="requestListInterval"
+                method="POST"
+                body="[[parametersList]]"
+                url="[[urlLimit]]"
+                content-type="application/json"
+                headers="[[headers]]"
+                handle-as="json"
+                loading="{{loadingList}}"
+                on-response="_didRespond"
+                debounce-duration="300">
+        </iron-ajax-->
+
+
+<div class="container backgroundpage">
+        <div class="flex-horizontal">
+            <div class="column_header" style="padding-left:3%"><iron-icon class="column_header_margin" icon="label"></iron-icon></div>
+            <div class="column_header  flexchild"><div class="column_header_margin title">RED COMERCIAL - {{nameCategorySelect}}</div></div>
+            <div class="column_header" style="padding-right:3%"><paper-icon-button slot="top" icon="more-horiz"></paper-icon-button></div>
+        </div>
+</div>
+
+
+
+            <!--div class="container2 flex-equal-justified flex-wrap backgroundpage">
+                    <div class="column_container">
+                        <paper-card>
+                            <div class="card-content">
+                                <div class="cafe-header">
+                                    {{item.name_category}}
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <div class="horizontal justified">
+                                    <div class="containerpaperbage" tabindex="0">
+                                        <span class="textbadge">Total</span>
+                                        <paper-badge label="{{item.numberOfPromotions}}" class="blue"></paper-badge>
+                                    </div>
+                                    <br>
+                                </div>
+                            </div>
+                        </paper-card>
+                    </div>
+            </div-->
+
+
+        <!--iron-list id="list" items="[]" as="person" scroll-target="document">
+            <template>
+                <div>
+                                 [[person.namesocio]]
+
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </iron-list-->
+
+        <!-- this element will load more data when the user scrolls down and reached the lower threshold -->
+        <!--iron-scroll-threshold id="scrollTheshold"
+                               lower-threshold="20"
+                               on-lower-threshold="_load"
+                               scroll-target="document"></iron-scroll-threshold-->
+
+
+        <div class="loadingIndicator">
+            <paper-spinner active="{{loadingDataCategory}}"></paper-spinner>
+        </div>
+
+
+    </template>
+    <script>
+        class PromotionCommercialList extends Polymer.Element{
+            static get is(){ return 'promotion-commerciallist' }
+            static get properties(){
+                return{
+                    dataLimitRequest:{
+                        type:Object,
+                        value:"",
+                        notify:true
+                    },
+                    /*urlLimit:{
+                        type:Text,
+                        value:"../../api_cmp/view/listpromotioninterval.php"
+                    },*/
+                    nameCategorySelect:String,
+                    parametersList:{
+                        type:Object,
+                        value:function() {
+                            return {
+                                idCategoryCurrent: "none",
+                                appid: "35f13ff714ce50c37baccead2e5a90c5="
+                            }
+                        }
+                    },
+                    parameters:{
+                        type:Object,
+                        value:function() {
+                            return {
+                                n: "none",
+                                appid: "35f13ff714ce50c37baccead2e5a90c5="
+                            }
+                        }
+                    },
+                    headers: {
+                        type: Object,
+                        computed: '_getHeaders(customHeader)'
+                    },
+                    customHeader: {
+                        value: '35f13ff714ce50c37baccead2e5a90c5='
+                    },
+                    cachecontrol: {
+                        value: 'max-age=0'
+                    }
+                }
+            }
+
+            static get observers() {
+                return [
+                    '_dataLimitRequestChanged(dataLimitRequest)'
+                ]
+            }
+
+            ready(){
+                super.ready();
+                console.log("ok1");
+            }
+            _routeParameters(getParameters){
+                this.urlListPromotions="../../api_cmp/view/listpromotion.php";
+                this.parameters.n=getParameters.n;
+                this.parametersList.idCategoryCurrent=getParameters.n;
+                this.$.requestListPromotions.generateRequest();
+                //console.log(this.parameters);
+                //console.log(getParameters);
+
+            }
+            _limitName(limitParameters){
+                console.log(limitParameters);
+                console.log("ok");
+            }
+            /*_listPromotionCurrent(request){
+                var dataInterval=request.detail.response;
+                console.log(dataInterval);
+            }*/
+            _handleResponse(request){
+                var dataCategory=request.detail.response;
+                this.nameCategorySelect=dataCategory.datosapi.nameCategory;
+                console.log(dataCategory);
+                this.$.requestListPromotions.generateRequest();
+            }
+            _dataLimitRequestChanged(e){
+                console.log(this.dataLimitRequest);
+            }
+            /*_load() {
+            this.$.requestListInterval.generateRequest();
+            }*/
+            /*_didRespond(e) {
+                if(e.detail.response==null){ return false; };
+            var people = e.detail.response.datosapi;
+            //console.log(people);
+            //return false;
+
+            people.forEach(function(person) {
+                this.$.list.push('items', person);
+            }, this);
+            // Clear the lower threshold so we can load more data when the user scrolls down again.
+            this.$.scrollTheshold.clearTriggers();
+            }*/
+            _getHeaders(customHeader) {
+            return {'Authorization': this.customHeader,'cache-control': this.cachecontrol};
+            }
+        }
+        window.customElements.define(PromotionCommercialList.is, PromotionCommercialList);
+    </script>
+</dom-module>

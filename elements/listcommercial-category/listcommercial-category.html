@@ -1,0 +1,105 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-demo-helpers/demo-snippet.html">
+<link rel="import" href="../../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
+<link rel="import" href="../../bower_components/iron-dropdown/iron-dropdown.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation-behavior.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+<dom-module id="listcommercial-category">
+    <template>
+        <custom-style>
+            <style is="custom-style">
+                paper-icon-button.moremenu{
+                    margin-top: -21px;
+                }
+                paper-listbox.listMenuSecondary {
+                    --paper-listbox: {
+                        background-color: aliceblue;
+                        color: #424242;
+                        padding: 8px 0;
+                        max-width: 230px;
+                        width: 200px;
+                    }
+                }
+                paper-item{
+                    font-size: 0.750em;
+                    text-transform: uppercase;
+                }
+                div.filtro{
+                    box-sizing: border-box; max-width: 200px; max-height: 550px; background-color: whitesmoke; background-color: #fff;
+                    box-shadow: rgba(0, 0, 0, 0.44) -1px 2px 2px;
+                }
+            </style>
+        </custom-style>
+
+        <paper-icon-button class="moremenu" slot="dropdown-trigger" icon="more-horiz" on-tap="_openlist"></paper-icon-button>
+        <iron-dropdown id="listCategory" horizontal-align="right" vertical-align="top">
+            <div slot="dropdown-content" class="dropdown-content filtro">
+                <paper-listbox class="listMenuSecondary">
+                    <dom-repeat id="listurl" is="dom-repeat" items="[]" as="dataurl">
+                        <template>
+                            <a href="https://app.servicioshuman.mx/[[dataurl.subcategory]]?r=[[dataurl.url_name]]&n=[[dataurl.id_category]]-[[dataurl.totalPage]]-[[dataurl.subcategory]]&m=[[dataurl.name_category]]">
+                            <paper-item>[[dataurl.name_category]]</paper-item>
+                            </a>
+                        </template>
+                    </dom-repeat>
+                </paper-listbox>
+            </div>
+        </iron-dropdown>
+    </template>
+    <script>
+        class ListCommercialCategory extends Polymer.Element{
+            static get is(){ return 'listcommercial-category' }
+            static get properties(){
+                return{
+                    listcategory:{
+                        type: Object,
+                        observer:'_listUrl',
+                        notify:true
+                    },
+                    headers: {
+                        type: Object,
+                        computed: '_getHeaders(customHeader)'
+                    },
+                    customHeader: {
+                        value: 'irladmin $apr1$Wegemgjf$n9azMhp.rlxLSyVWyUITA.'
+                    },
+                    cachecontrol: {
+                        value: 'max-age=0'
+                    }
+                }
+            }
+            ready(){
+                super.ready();
+            }
+            _openlist(){
+                //console.log(this.listcategory);
+                this.$.listCategory.animate([
+                    {opacity:0,easing:'ease-in'},
+                    {opacity:0.5,easing:'ease-in'},
+                    {opacity:1,easing:'ease-in'},
+                ],{
+                    duration:300,
+                });
+                this.$.listCategory.open();
+            }
+            _listUrl(listData){
+                if(listData=="no"){
+                    return false;
+                }
+                this.$.listurl.items=[];
+                this.$.listurl.items=listData.datosapi;
+                //console.log(this.$.listurl.items);
+            }
+            _getHeaders(customHeader) {
+            return {'Authorization': this.customHeader,'cache-control': this.cachecontrol};
+            }
+        }
+        window.customElements.define(ListCommercialCategory.is, ListCommercialCategory);
+    </script>
+</dom-module>

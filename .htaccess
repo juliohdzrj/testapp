@@ -1,0 +1,38 @@
+#ErrorDocument 404 http://www.servicioshuman.com.mx/
+Options -Multiviews
+Options +FollowSymLinks
+
+#SetEnvIf Request_URI "/(index\.php|api|oauth)(/.*)?$" allow
+#AuthType Basic
+#AuthName "api"
+#AuthUserFile /api_cmp/.htpasswd
+#Require valid-user
+
+RewriteEngine On
+#FUNCIONA PARA UNA CARPETA
+#-----------------------------------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* /
+
+#TERMINA FUNCIONA PARA UNA CARPETA
+
+#Estas dos lineas funcionan
+
+RewriteCond %{HTTPS} !=on
+RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+#-----------------------------------------------------------------------------
+
+
+
+
+
+#Header add Access-Control-Allow-Origin "*"
+#Header always set Access-Control-Allow-Methods "OPTIONS,POST,GET,PUT,DELETE"
+#Header always set Access-Control-Allow-Headers "Content-Type,Authorization,Lang,cache-control"
+#Header set Access-Control-Allow-Credentials "false"
+
+Header add Access-Control-Allow-Credentials true
+Header add Access-Control-Allow-Origin "*"
+Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type, Authorization, Lang, cache-control"
+Header add Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"

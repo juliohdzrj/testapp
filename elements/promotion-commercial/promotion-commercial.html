@@ -1,0 +1,553 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/promise-polyfill/promise-polyfill-lite.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-iconset-svg/iron-iconset-svg.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<!--CUSTOM ELEMENTS-->
+<link rel="import" href="../../elements/listcommercial-category/listcommercial-category.html">
+<!--END CUSTOM ELEMENTS-->
+
+<dom-module id="promotion-commercial">
+    <template>
+        <custom-style>
+            <style is="custom-style">
+                :host {
+                    font-family: 'Roboto', 'Noto', sans-serif;
+                    font-size: 16px;
+                    /*--paper-toolbar-background:rgb(32, 98, 175);*/
+                }
+                div.backgroundpage{
+                    /*background-color: rgb(250, 250, 250);
+                    background-color:  rgb(245, 245, 245);*/
+                }
+                .flex-equal-justified {
+                    @apply --layout-horizontal;
+                    @apply --layout-justified;
+                }
+                .flex-wrap {
+                    @apply --layout-horizontal;
+                    @apply --layout-wrap;
+                }
+                .flex-horizontal {
+                    @apply --layout-horizontal;
+                }
+                .flexchild {
+                    @apply --layout-flex;
+                }
+                div.column_container{
+                    display: flex;
+                    width: 31%;
+                    padding: 0;
+                    margin-top: 3%;
+                    margin-bottom: 3%;
+                }
+                div.container{
+                    /*padding-left: 3%;
+                    padding-right: 3%;*/
+                    padding-top: 3%;
+                    /*padding-bottom: 3%;*/
+                }
+                div.container2{
+                    padding-left: 3%;
+                    padding-right: 3%;
+                    padding-bottom: 3%;
+                    /*background-color: rgb(245, 245, 245);
+                    background: linear-gradient(15deg, rgb(71, 149, 209) 50%, rgb(0, 110, 184) 50.1%);*/
+                }
+                div.title{
+                    font-size: 0.938em;
+                    font-weight: 500 !important;
+                    text-transform: uppercase !important;
+                }
+                paper-icon-button.moremenu{
+                    margin-top: -10px;
+                }
+                div.column_header{
+                    padding: 1%;
+                    color: rgb(83, 83, 83);
+                    /*background-color: rgb(32, 98, 175);
+                    color: ghostwhite;*/
+                }
+
+                @media (max-width: 768px) {
+                    /* For mobile phones: */
+                    div.column_container{
+                        width: 44%;
+                    }
+                }
+                @media (max-width: 445px) {
+                    /* For mobile phones: */
+                    div.column_container{
+                        text-align: center;
+                        width: 100%;
+                    }
+
+                    paper-card.imagespromotions{
+                        width: 90% !important;
+                    }
+                }
+
+            </style>
+            <style is="custom-style">
+                .containerpaperbage {
+                    display: inline-block;
+                    margin-top: 10px;
+                    padding-bottom: 10px;
+                }
+                /* Need to position the badge to look like a text superscript */
+                .containerpaperbage > paper-badge {
+                    --paper-badge-margin-left: 28px;
+                    --paper-badge-margin-bottom: 0px;
+                    --paper-badge-width:25px;
+                            --paper-badge-height:25px
+                }
+                .blue {
+                    /*--paper-badge-background: var(--paper-light-blue-300);*/
+                    --paper-badge-background:var(--paper-indigo-500);
+                }
+
+
+                .loadingIndicator {
+                    text-align: center;
+                    height: 40px;
+                    width: 100%;
+                }
+
+                paper-spinner {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 10px;
+                }
+                iron-list {
+                    flex: 1 1 auto;
+                }
+
+                paper-card.imagespromotions{
+                    width: 100%;
+                    margin-top: 6%;
+                    margin-bottom: 6%;
+                    background-color: white;
+                }
+                paper-card.imagespromotions{
+                    --paper-card-actions:{
+                        text-align: center;
+                        float: left;
+                        width: 100%;
+                        padding: 0;
+                        padding-bottom: 3%;
+                        padding-top: 3%;
+                    }
+                }
+
+                paper-card.imagespromotions{
+                    --paper-card-header:{
+                        width: 100px;
+                        float: left;
+                    }
+                }
+
+                paper-card.imagespromotions{
+                    --paper-card-content:{
+                        font-family: 'Roboto', 'Noto', sans-serif;
+                        font-size: 0.875em;
+                        text-align: center;
+                        font-weight: bold;
+                        text-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.3686274509803922);
+                    }
+                }
+
+                /*paper button pink*/
+                paper-button {
+                    font-family: 'Roboto', 'Noto', sans-serif;
+                    font-weight: normal;
+                    font-size: 14px;
+                    -webkit-font-smoothing: antialiased;
+                }
+                paper-button.pink {
+                    color: var(--paper-pink-a200);
+                    --paper-button-ink-color: var(--paper-pink-a200);
+                }
+                iron-icon.margin_icon_header{
+                    margin-top: -5px;
+                }
+                /*paper-button.pink:hover {
+                    background-color: var(--paper-pink-100);
+                }*/
+                /*End paper button pink*/
+            </style>
+            <style is="custom-style">
+                paper-button.custom {
+                    --paper-button-ink-color: var(--paper-pink-a200);
+                    /* These could also be individually defined for each of the
+                      specific css classes, but we'll just do it once as an example */
+                    --paper-button-flat-keyboard-focus: {
+                        background-color: var(--paper-pink-a200);
+                        color: white !important;
+                    };
+                    --paper-button-raised-keyboard-focus: {
+                        background-color: var(--paper-pink-a200) !important;
+                        color: white !important;
+                    };
+                }
+                paper-button.custom:hover {
+                    background-color: var(--paper-indigo-100);
+                }
+                paper-button.pink {
+                    color: var(--paper-pink-a200);
+                }
+                paper-button.indigo {
+                    background-color: var(--paper-indigo-500);
+                    color: white;
+                    --paper-button-raised-keyboard-focus: {
+                        background-color: var(--paper-pink-a200) !important;
+                        color: white !important;
+                    };
+                }
+                paper-button.green {
+                    background-color: var(--paper-green-500);
+                    color: white;
+                }
+                paper-button.green[active] {
+                    background-color: var(--paper-red-500);
+                }
+                paper-button.disabled {
+                    color: white;
+                }
+            </style>
+
+            <style is="custom-style">
+                .column_container paper-card{
+                    width: 100%;
+                    margin: 0 auto;
+                }
+                .rate-image {
+                    position: relative;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: 100%;
+                    height: 100px;
+                    padding-top: 3%;
+                    padding-bottom: 3%;
+                    background-size: 100px 100px;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                }
+                .rate-header { @apply --paper-font-headline; }
+                .rate-name { color: var(--paper-grey-600); margin: 10px 0; }
+                paper-icon-button.rate-icon {
+                    --iron-icon-fill-color: white;
+                    --iron-icon-stroke-color: var(--paper-grey-600);
+                }
+                .layer {
+                    background: linear-gradient(141deg,rgba(68, 170, 255, 0.45) 30%, rgb(32, 137, 175) 75%);
+                    height: 100%;
+                    width: 100%;
+                    position: relative;
+                    opacity: 0.4;
+                    /* margin-top: -121px; */
+                    /* border-bottom: 1px solid rgb(128, 128, 128); */
+                    /* margin: -4%; */
+                    padding-bottom: 3%;
+                    padding-top: 3%;
+                    margin-top: -3%;
+                }
+                div.rate-header h2 {
+                    margin: 0;
+                    text-transform: uppercase;
+                    /*font-size: 90px;
+                    line-height: 50px;*/
+                    font-weight: 100;
+                    position: relative;
+                    color:#868383;
+                    font-size: 0.938em;
+                }
+
+                paper-card div.card-actions{
+                    padding-top: 8%;
+                    padding-bottom: 8%;
+                    text-align: center;
+                    font-weight: 500;
+                    color: #908e8e;
+                    font-size: 1em;
+                }
+
+                paper-card small{
+                    text-transform: uppercase;
+                    color:#908e8e;
+                }
+                paper-card a.linkcard{
+                    color:rgb(85, 178, 218);
+                }
+            </style>
+
+        </custom-style>
+        <!-- Request listpromotion.php timeout="10000"-->
+        <iron-ajax
+                id="requestListInterval"
+                handle-as="json"
+                loading="{{loadingDataCategory}}"
+                on-response="_didRespond"
+                verbose="true"
+                on-error="_showError"
+                >
+        </iron-ajax>
+
+        <div class="container backgroundpage">
+            <div class="flex-horizontal">
+                <div class="column_header" style="padding-left:3%"><iron-icon class="margin_icon_header" icon="label"></iron-icon></div>
+                <div class="column_header  flexchild"><div class="title">RED COMERCIAL - [[namecategory]]</div></div>
+                <div class="column_header" style="padding-right:3%">
+                    <listcommercial-category listcategory="{{listcategorycommercial}}"></listcommercial-category>
+                </div>
+            </div>
+        </div>
+
+    <div class="container2 flex-equal-justified flex-wrap backgroundpage">
+        <dom-repeat id="list" is="dom-repeat" items="[]" as="promotion">
+        <template>
+            <div class="column_container">
+                <paper-card class="rate">
+                    <div class="rate-image" style="background-image: url('data:image/jpg;base64, [[promotion.image]]')">
+                        <div class="layer"></div>
+
+                    </div>
+
+                    <div class="card-content">
+                        <div class="rate-header"><h2>[[promotion.namesocio]]</h2></div>
+                        <div class="rate-name">[[namecategory]]</div>
+                        <div><small>[[promotion.currentDate]]</small></div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="[[promotion.urlName]]" class="linkcard"><paper-button raised>VER PROMOCIÓN</paper-button></a>
+                        <!--paper-icon-button class="rate-icon" icon="star"></paper-icon-button>
+                        <paper-icon-button class="rate-icon" icon="star"></paper-icon-button>
+                        <paper-icon-button class="rate-icon" icon="star"></paper-icon-button>
+                        <paper-icon-button class="rate-icon" icon="star"></paper-icon-button>
+                        <paper-icon-button class="rate-icon" icon="star"></paper-icon-button-->
+                    </div>
+                </paper-card>
+            </div>
+        </template>
+        </dom-repeat>
+        <div class="loadingIndicator">
+            <paper-spinner active="[[loadingDataCategory]]"></paper-spinner>
+        </div>
+    </div>
+
+
+
+
+
+        <!--iron-list id="list" items="[]" as="person" scroll-target="document">
+            <template id="tamplateClear">
+                <div class="removeelm" style="height: 300px">
+                                 [[person.namesocio]]
+
+                        </div>
+            </template>
+        </iron-list-->
+
+        <!-- this element will load more data when the user scrolls down and reached the lower threshold -->
+        <iron-scroll-threshold id="scrollTheshold"
+                               upperThreshold="100"
+                               lower-threshold="500"
+                               on-lower-threshold="_loadMore"
+                               scroll-target="document"
+                               verboso="true"
+                               ></iron-scroll-threshold>
+
+
+
+
+
+        <!--paper-icon-button slot="top" icon="more-horiz" on-tap="_loadMore">Load</paper-icon-button-->
+
+
+
+    </template>
+    <script>
+        var scrollTop = function() {
+            var scrollDuration = 500;
+            var scrollStep = -window.scrollY / (scrollDuration / 15),
+                scrollInterval = setInterval(function(){
+                    if ( window.scrollY != 0 ) {
+                        window.scrollBy( 0, scrollStep );
+                    }
+                    else clearInterval(scrollInterval);
+                },15);
+
+        }
+        class PromotionCommercial extends Polymer.Element{
+            static get is(){ return 'promotion-commercial' }
+            static get properties(){
+                return{
+                    idcategoria:{
+                        type:Object,
+                        observer:'_setIdCategory'
+                    },
+                    datacurrentitem: {
+                        type: Array,
+                        value: function() {
+                            return [];
+                        }
+                    },
+                    currentId:{
+                        type:Number,
+                    },
+                    totalPages:{
+                        type:Number,
+                    },
+                    pageCounter:{
+                        type:Number,
+                        value:0
+                    },
+                    parametersListPage:{
+                        type:Object,
+                        value:function() {
+                            return {
+                                idCategoryCurrent: "none",
+                                range:0,
+                                appid: "35f13ff714ce50c37baccead2e5a90c5="
+                            }
+                        }
+                    },
+                    urlLimit:{
+                        type:Text,
+                        value:"../../api_cmp/view/listpromotion.php"
+                    },
+                    urlCustom:Text,
+                    storageDataAll: {
+                        type: Array,
+                        value: function() {
+                            return [];
+                        }
+                    },
+                    headersCustom: {
+                        type: Object,
+                        computed: '_getHeaders(customHeader)'
+                    },
+                    customHeader: {
+                        value: '35f13ff714ce50c37baccead2e5a90c5='
+                    },
+                    cachecontrol: {
+                        value: 'max-age=0'
+                    }
+                }
+            }
+            ready(){
+                super.ready();
+            }
+            _showError(e, error){
+                if(error.request.status==0){
+                    location.reload();
+                }
+                //location.reload();
+                //console.log(error.request);
+                //console.log(error.request.status);
+            }
+            _setIdCategory(setIdCategoryCurrent){
+                //console.log(setIdCategoryCurrent);
+                var resultId=setIdCategoryCurrent.n.split("-");
+                console.log(resultId);
+                if(resultId[2]=="categoria"||resultId[2]=="promocion"||resultId[2]=="consulta"){
+                    return false;
+                }
+                this.currentId=resultId[0];
+                this.totalPages=resultId[1];
+                this.pageCounter=0;
+                //scrollTop();
+                this.$.list.set('items', []);
+
+                if(this.datacurrentitem[this.currentId]){
+                    //console.log(this.datacurrentitem[this.currentId].length);
+                    /*GENERAMOS LISTA*/
+                    this.datacurrentitem[this.currentId].forEach(function(datalistid) {
+                        datalistid.forEach(function(datalist2) {
+                            this.$.list.push('items', datalist2);
+                            this.$.list.render();
+                        }, this);
+                    }, this);
+                    /*END GENERAMOS LISTA*/
+                    this.$.scrollTheshold.clearTriggers();
+                }else{
+                    this._loadMore();
+                }
+            }
+            _loadMore(){
+                if(this.currentId==undefined){
+                    return false;
+                }
+
+                if(this.datacurrentitem[this.currentId]){
+                    var lengthPage=this.datacurrentitem[this.currentId].length;
+                    this.pageCounter=lengthPage;
+                }
+
+                this.parametersListPage.idCategoryCurrent=this.currentId;
+                this.parametersListPage.range=this.pageCounter*20;
+                this.urlCustom=this.urlLimit+"?n="+this.currentId+"&r="+this.parametersListPage.range;
+                this.pageCounter++;
+                //console.log(this.pageCounter);
+                //console.log(this.totalPages);
+                if(this.pageCounter<=this.totalPages) {
+
+
+                    var ajax=this.$.requestListInterval;
+                    var parametersListPage=this.parametersListPage;
+                    //ajax.body=parametersListPage;
+                    //ajax.url=this.urlLimit;
+                    ajax.url=this.urlCustom;
+                    ajax.headers=this.headersCustom;
+                    ajax.method="GET";
+                    //ajax.contentType="application/json";
+                    ajax.contentType="application/x-www-form-urlencoded";
+                    ajax.withCredentials=true;
+                    ajax.sync=false;
+                    ajax.debounceDuration=300;
+                    ajax.generateRequest();
+
+
+
+
+                    //this.$.requestListInterval.generateRequest();
+                }
+
+            }
+            _didRespond(request){
+                var datastorage=request.detail.response.datosapi;
+                this.$.scrollTheshold.clearTriggers();
+                    /*render data*/
+                    //console.log(request.detail.response);
+                    datastorage.forEach(function (datalist) {
+                        this.push('storageDataAll', datalist);
+                        this.$.list.push('items', datalist);
+                        this.$.list.render();
+                    }, this);
+                        if(!this.datacurrentitem[this.currentId]){
+                            this.datacurrentitem[this.currentId]=[];
+                        }
+                this.datacurrentitem[this.currentId].push(this.storageDataAll);
+                this.set('storageDataAll',[]);
+                //console.log(this.datacurrentitem);
+                //console.log(request.detail.response);
+                    /*END render data*/
+            }
+
+
+            _getHeaders(customHeader) {
+            return {'Accept': 'application/x-www-form-urlencoded','Authorization': this.customHeader,'cache-control': this.cachecontrol};
+            }
+        }
+        window.customElements.define(PromotionCommercial.is, PromotionCommercial);
+    </script>
+</dom-module>

@@ -1,0 +1,799 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../elements/font-roboto/roboto.html">
+<link rel="import" href="../../bower_components/promise-polyfill/promise-polyfill-lite.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-iconset-svg/iron-iconset-svg.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<!--CUSTOM ELEMENTS-->
+<link rel="import" href="../../elements/listmedical-category/listmedical-category.html">
+<!--END CUSTOM ELEMENTS-->
+
+<dom-module id="promotion-featuresmedical">
+    <template>
+        <custom-style>
+            <style is="custom-style">
+                :host {
+                    font-family: 'Roboto', 'Noto', sans-serif;
+                    font-size: 16px;
+                    /*--paper-toolbar-background:rgb(32, 98, 175);*/
+                }
+                div.backgroundpage{
+                    /*background-color: rgb(250, 250, 250);
+                    background-color:  rgb(245, 245, 245);*/
+                }
+                .flex-equal-around-justified {
+                    @apply --layout-horizontal;
+                    @apply --layout-around-justified;
+                }
+                .flex-center-justified {
+                    @apply --layout-horizontal;
+                    @apply --layout-center-justified;
+                }
+                .flex-equal-justified {
+                    @apply --layout-horizontal;
+                    @apply --layout-justified;
+                }
+                .flex-wrap {
+                    @apply --layout-horizontal;
+                    @apply --layout-wrap;
+                }
+                .flex-horizontal {
+                    @apply --layout-horizontal;
+                }
+                .flexchild {
+                    @apply --layout-flex;
+                }
+                div.column_container{
+                    display: flex;
+                    width: 100%;
+                    padding: 0;
+                    margin-top: 3%;
+                    margin-bottom: 3%;
+                }
+                div.container{
+                    /*padding-left: 3%;
+                    padding-right: 3%;*/
+                    padding-top: 3%;
+                    /*padding-bottom: 3%;*/
+                }
+                div.container2{
+                    padding-left: 3%;
+                    padding-right: 3%;
+                    padding-bottom: 3%;
+                    /*background-color: rgb(245, 245, 245);
+                    background: linear-gradient(15deg, rgb(71, 149, 209) 50%, rgb(0, 110, 184) 50.1%);*/
+                }
+                div.title{
+                    text-transform: uppercase !important;
+                }
+                paper-icon-button.moremenu{
+                    margin-top: -10px;
+                }
+                div.column_header{
+                    padding: 1%;
+                    color: rgb(83, 83, 83);
+                    /*background-color: rgb(32, 98, 175);
+                    color: ghostwhite;*/
+                }
+
+                @media (min-width: 768px){
+                    paper-card.rate{
+                        width:60%;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    /* For mobile phones: */
+                    div.column_container{
+                        width: 44%;
+                    }
+
+                    paper-card.rate{
+                        width: 100%;
+                    }
+
+                }
+                @media (max-width: 445px) {
+                    /* For mobile phones: */
+                    div.column_container{
+                        text-align: center;
+                        width: 100%;
+                    }
+
+                    paper-card.imagespromotions{
+                        width: 90% !important;
+                    }
+                }
+
+                @media(min-width: 375px){
+                    div.title {
+                        font-size: 0.938em;
+                        font-weight: 500 !important;
+                    }
+                    iron-icon.margin_icon_header {
+                        margin-top: -5px;
+                    }
+                }
+
+                @media(max-width: 375px){
+                    div.title {
+                        font-size: 0.750em;
+                    }
+                    iron-icon.margin_icon_header {
+                        margin-top: -8px;
+                        width: 14px;
+                    }
+                }
+
+            </style>
+            <style is="custom-style">
+                .containerpaperbage {
+                    display: inline-block;
+                    margin-top: 10px;
+                    padding-bottom: 10px;
+                }
+                /* Need to position the badge to look like a text superscript */
+                .containerpaperbage > paper-badge {
+                    --paper-badge-margin-left: 28px;
+                    --paper-badge-margin-bottom: 0px;
+                    --paper-badge-width:25px;
+                    --paper-badge-height:25px
+                }
+                .blue {
+                    /*--paper-badge-background: var(--paper-light-blue-300);*/
+                    --paper-badge-background:var(--paper-indigo-500);
+                }
+
+
+                .loadingIndicator3 {
+                    text-align: center;
+                    height: 40px;
+                    width: 100%;
+                }
+
+                paper-spinner {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 10px;
+                }
+                iron-list {
+                    flex: 1 1 auto;
+                }
+
+                paper-card.imagespromotions{
+                    width: 100%;
+                    margin-top: 6%;
+                    margin-bottom: 6%;
+                    background-color: white;
+                }
+                paper-card.imagespromotions{
+                    --paper-card-actions:{
+                        text-align: center;
+                        float: left;
+                        width: 100%;
+                        padding: 0;
+                        padding-bottom: 3%;
+                        padding-top: 3%;
+                    }
+                }
+
+                paper-card.imagespromotions{
+                    --paper-card-header:{
+                        width: 100px;
+                        float: left;
+                    }
+                }
+
+                paper-card.imagespromotions{
+                    --paper-card-content:{
+                        font-family: 'Roboto', 'Noto', sans-serif;
+                        font-size: 0.875em;
+                        text-align: center;
+                        font-weight: bold;
+                        text-shadow: 0.5px 0.5px rgba(0, 0, 0, 0.3686274509803922);
+                    }
+                }
+
+                /*paper button pink*/
+                paper-button {
+                    font-family: 'Roboto', 'Noto', sans-serif;
+                    font-weight: normal;
+                    font-size: 14px;
+                    -webkit-font-smoothing: antialiased;
+                }
+                paper-button.pink {
+                    color: var(--paper-pink-a200);
+                    --paper-button-ink-color: var(--paper-pink-a200);
+                }
+                /*iron-icon.margin_icon_header{
+                    margin-top: -5px;
+                }*/
+                paper-button.pink:hover {
+                    background-color: var(--paper-pink-100);
+                }
+                /*End paper button pink*/
+            </style>
+            <style is="custom-style">
+                paper-button.custom {
+                    text-transform: none !important;
+                    /*--paper-button-ink-color: var(--paper-pink-a200);*/
+                    --paper-button-ink-color: rgb(57, 73, 171);
+                    /* These could also be individually defined for each of the
+                      specific css classes, but we'll just do it once as an example */
+                    --paper-button-flat-keyboard-focus: {
+                        background-color: rgb(57, 73, 171, 0.3); !important;
+                        /*color: white !important;*/
+
+                    };
+                }
+
+                a.colorLink{
+                color:rgb(57, 73, 171);
+                    font-size: 0.875em;
+                }
+                paper-button.custom:hover {
+                    /*background-color: var(--paper-indigo-100);*/
+                }
+                paper-button.pink {
+                    color: var(--paper-pink-a200);
+                }
+                paper-button.indigo {
+                    background-color: var(--paper-indigo-500);
+                    color: white;
+                    --paper-button-raised-keyboard-focus: {
+                        background-color: var(--paper-pink-a200) !important;
+                        color: white !important;
+                    };
+                }
+                paper-button.green {
+                    background-color: var(--paper-green-500);
+                    color: white;
+                }
+                paper-button.green[active] {
+                    background-color: var(--paper-red-500);
+                }
+                paper-button.disabled {
+                    color: white;
+                }
+            </style>
+
+            <style is="custom-style">
+                .column_container paper-card{
+                    width: 100%;
+                    margin: 0 auto;
+                }
+                paper-card.rate{
+                    margin-top:2.8%;
+                }
+                .rate-image {
+                    position: relative;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: 100%;
+                    /*height: 238px;
+                    padding-top: 3%;
+                    padding-bottom: 3%;*/
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: contain;
+                }
+                .rate-header { @apply --paper-font-headline; }
+                .rate-name { text-transform: uppercase; color: var(--paper-grey-600); margin: 10px 0; }
+                paper-icon-button.rate-icon {
+                    --iron-icon-fill-color: white;
+                    --iron-icon-stroke-color: var(--paper-grey-600);
+                }
+                .layer {
+                    /*background: linear-gradient(141deg,rgba(68, 170, 255, 0.45) 30%, rgb(32, 137, 175) 75%);
+                    height: 100%;
+                    width: 100%;
+                    position: relative;
+                    opacity: 0.4;*/
+                    /* margin-top: -121px; */
+                    /* border-bottom: 1px solid rgb(128, 128, 128); */
+                    /* margin: -4%; */
+                    /*padding-bottom: 3%;
+                    padding-top: 3%;
+                    margin-top: -3%;*/
+                }
+                div.rate-header h2 {
+                    margin: 0;
+                    text-transform: uppercase;
+                    /*font-size: 90px;
+                    line-height: 50px;*/
+                    font-weight: 100;
+                    position: relative;
+                    color:#868383;
+                    font-size: 0.938em;
+                }
+
+                paper-card div.card-actions{
+                    padding-top: 1.5%;
+                    padding-bottom: 1.5%;
+                    /*text-align: center;*/
+                    font-weight: 500;
+                    color: #908e8e;
+                    font-size: 1em;
+                }
+
+                paper-card small{
+                    text-transform: uppercase;
+                    color:#908e8e;
+                }
+                paper-card a.linkcard{
+                    color:rgb(85, 178, 218);
+                }
+
+                div.card-actions paper-button{
+                    /*width: 132px;
+                    margin-top: 9%;
+                    margin-bottom: 9%;*/
+                }
+                div.rate-txt1m p, div.rate-txt2m p, div.rate-txt3m p, div.rate-txt4m p, div.rate-txt5m p, div.rate-txt6m p, div.rate-txt7m p, div.rate-txt8m p{
+                    /*margin: 0;
+                    margin-bottom: 4px;*/
+                    line-height: normal;
+                    font-size: 0.875em;
+                }
+                div.smalltag{
+                    margin: 10px 0;
+                }
+                div.rate-txt1m, div.rate-txt2m, div.rate-txt3m, div.rate-txt4m{
+                color: var(--paper-grey-600);
+                }
+                div.rate-txt5m, div.rate-txt6m, div.rate-txt7m, div.rate-txt8m{
+                    word-break: break-word;
+                    line-height: normal;
+                    font-size: 0.875em;
+                }
+                div.card-content h5{
+                    margin: 20px 0px 5px 0px;
+                    color: rgb(128, 128, 128);
+                }
+                div.contentCol{
+                    width: 50%;
+                }
+                div.contentRow1{
+                    padding-right: 1.5%;
+                }
+
+                paper-card .card-content{
+                    --paper-card-content:{
+                        padding-left: 3%;
+                        padding-right: 3%;
+                    }
+                }
+            </style>
+
+        </custom-style>
+        <!-- Request listpromotion.php   timeout="10000"-->
+        <iron-ajax
+                id="getPromotionCurrent"
+                handle-as="json"
+                loading="{{loadingDataCategory3}}"
+                on-response="_didRespond"
+                verbose="true"
+                on-error="_showError">
+        </iron-ajax>
+        <div class="container backgroundpage">
+            <div class="flex-horizontal">
+                <div class="column_header" style="padding-left:3%"><iron-icon class="margin_icon_header" icon="label"></iron-icon></div>
+                <div class="column_header  flexchild"><div class="title">RED MÉDICA - [[nameCategoryCurrent]] - [[namePromotion]]</div></div>
+                <div class="column_header" style="padding-right:3%">
+                    <listmedical-category listcategory="{{listcategorymedical}}"></listmedical-category>
+                </div>
+            </div>
+        </div>
+
+        <div class="container2 backgroundpage">
+            <div class="flex-center-justified">
+            <dom-repeat id="listPromotionFeatures" is="dom-repeat" items="[]" as="promotion">
+                <template>
+
+
+                        <paper-card class="rate">
+                            <div class="rate-image">
+                                <img src='data:image/jpeg;base64, [[promotion.image]]' width="100%" alt="">
+                            </div>
+
+                            <div class="card-content">
+
+
+
+                                <div class="rate-header"><h2>[[promotion.namesocio]]</h2></div>
+                                <div class="rate-name">[[nameCategoryCurrent]]</div>
+                                <div class="smalltag"><small>[[promotion.currentDate]]</small></div>
+
+                                <div class="card-content">
+
+                                    <div class="contentRow1">
+                                        <h5>PROMOCIÓN</h5>
+                                        <div class="rate-txt1m">&nbsp</div>
+                                    </div>
+                                    <div class="contentRow1">
+                                        <h5>DIRECCIÓN</h5>
+                                        <div class="rate-txt2m">&nbsp</div>
+                                    </div>
+                                    <div class="contentRow1">
+                                        <h5>HORARIOS</h5>
+                                        <div class="rate-txt3m">&nbsp</div>
+                                    </div>
+                                    <div class="contentRow1">
+                                        <h5>TELÉFONO</h5>
+                                        <div class="rate-txt4m">&nbsp</div>
+                                    </div>
+
+
+                                        <div class="contentRow">
+                                            <h5>PÁGINA WEB</h5>
+                                            <div class="rate-txt5m">&nbsp</div>
+                                        </div>
+                                        <div class="contentRow">
+                                            <h5>FACEBOOK</h5>
+                                            <div class="rate-txt6m">&nbsp</div>
+                                        </div>
+                                        <div class="contentRow">
+                                            <h5>TWITTER</h5>
+                                            <div class="rate-txt7m">&nbsp</div>
+                                        </div>
+                                        <div class="contentRow">
+                                            <h5>E-MAIL</h5>
+                                            <div class="rate-txt8m">&nbsp</div>
+                                        </div>
+
+                                </div>
+                            </div>
+                            <div class="card-actions contentToolsm">
+                                <!--paper-button>VER PROMOCIÓN</paper-button>
+                                <paper-button>Explore!</paper-button-->
+                            </div>
+                            <!--div class="card-actions">
+                                <div class="flex-wrap flex-equal-around-justified">
+                                    <paper-button>VER PROMOCIÓN</paper-button>
+                                    <div class="urlCurrentCupon">&nbsp;</div>
+                                    <div class="urlCurrentSucursales">&nbsp;</div>
+                                </div>
+                            </div-->
+                        </paper-card>
+
+
+                </template>
+            </dom-repeat>
+            </div>
+            <div class="loadingIndicator3">
+                <paper-spinner active="[[loadingDataCategory3]]"></paper-spinner>
+            </div>
+        </div>
+
+
+
+
+
+        <!--iron-list id="list" items="[]" as="person" scroll-target="document">
+            <template id="tamplateClear">
+                <div class="removeelm" style="height: 300px">
+                                 [[person.namesocio]]
+
+                        </div>
+            </template>
+        </iron-list-->
+
+        <!-- this element will load more data when the user scrolls down and reached the lower threshold -->
+        <!--iron-scroll-threshold id="scrollTheshold"
+                               upperThreshold="100"
+                               lower-threshold="500"
+                               on-lower-threshold="_loadMore"
+                               scroll-target="document"
+                               verboso="true"
+        ></iron-scroll-threshold-->
+
+
+
+
+
+        <!--paper-icon-button slot="top" icon="more-horiz" on-tap="_loadMore">Load</paper-icon-button-->
+
+
+
+    </template>
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+            crossorigin="anonymous">
+    </script>
+    <script>
+
+        //function urlpromotion(url){
+            //console.log(url);
+            //console.log($(".urlCurrentCupon").text());
+        //}
+
+
+        var scrollTop = function() {
+            var scrollDuration = 500;
+            var scrollStep = -window.scrollY / (scrollDuration / 15),
+                scrollInterval = setInterval(function(){
+                    if ( window.scrollY != 0 ) {
+                        window.scrollBy( 0, scrollStep );
+                    }
+                    else clearInterval(scrollInterval);
+                },15);
+
+        }
+        class PromotionFeaturesMedical extends Polymer.Element{
+            static get is(){ return 'promotion-featuresmedical' }
+            static get properties(){
+                return{
+                    idcategoria:{
+                        type:Object,
+                        observer:'_setIdCategory'
+                    },
+                    nameCategoryCurrent:Text,
+                    namePromotion:Text,
+                    datacurrentitem: {
+                        type: Array,
+                        value: function() {
+                            return [];
+                        }
+                    },
+                    currentCupon:{
+                        type:Text
+                    },
+                    currentId:{
+                        type:Number
+                    },
+                    subcurrentId:{
+                        type:Number
+                    },
+                    totalPages:{
+                        type:Number
+                    },
+                    pageCounter:{
+                        type:Number,
+                        value:0
+                    },
+                    parametersListPage:{
+                        type:Object,
+                        value:function() {
+                            return {
+                                idPromotionCurrent: "none",
+                                appid: "35f13ff714ce50c37baccead2e5a90c5="
+                            }
+                        }
+                    },
+                    urlLimit:{
+                        type:Text,
+                        value:"../../api_cmp/view/getpromotioncurrent.php"
+                    },
+                    urlCustom:{
+                        type:Text,
+                    },
+                    storageDataAll: {
+                        type: Array,
+                        value: function() {
+                            return [];
+                        }
+                    },
+                    headersCustom: {
+                        type: Object,
+                        computed: '_getHeaders(customHeader)'
+                    },
+                    customHeader: {
+                        value: '35f13ff714ce50c37baccead2e5a90c5='
+                    },
+                    cachecontrol: {
+                        value: 'max-age=0'
+                    }
+                }
+            }
+            ready(){
+                super.ready();
+                //console.log("show ficha");
+            }
+            _showError(e, error){
+                //location.reload();
+                if(error.request.status==0){
+                    //location.reload();
+                }
+                //console.log(error.request);
+                //console.log(error.request.status);
+                /*console.log(event);
+                 console.log(event.detail);
+                 console.log(event.detail.error);
+                 console.log(event.detail.error.message);
+                 console.log(event.detail.request);
+                 console.log(event.detail.request.xhr.response);
+                 console.log(event.detail.response);
+                 console.log(event.detail.request.response);
+                 console.log(request);*/
+            }
+            _setIdCategory(setIdCategoryCurrent){
+                console.log(setIdCategoryCurrent);
+                if(!setIdCategoryCurrent.s){
+                    return false;
+                }
+                var resultId=setIdCategoryCurrent.n.split("_");
+                if(resultId[1]!="medica"){
+                    return false;
+                }
+                var resultNameCategory=setIdCategoryCurrent.s.split("-");
+                console.log(resultNameCategory);
+                this.nameCategoryCurrent=resultNameCategory[0];
+                this.namePromotion=resultNameCategory[1];
+                this.currentId=resultId[0];
+                scrollTop();
+                this.$.listPromotionFeatures.set('items', []);
+                this._loadMore();
+                return false;
+
+
+                /*if(this.datacurrentitem[this.subcurrentId]){
+                    console.log(this.datacurrentitem[this.subcurrentId].length);
+                    /*GENERAMOS LISTA*/
+                   /* this.datacurrentitem[this.subcurrentId].forEach(function(datalistid) {
+                        datalistid.forEach(function(datalist2) {
+                            this.$.list.push('items', datalist2);
+                            this.$.list.render();
+                        }, this);
+                    }, this);*/
+                    /*END GENERAMOS LISTA*/
+                    /*this.$.scrollTheshold.clearTriggers();
+                }else{
+                    this._loadMore();
+                }*/
+            }
+            _loadMore(){
+                if(this.currentId==undefined){
+                    return false;
+                }
+                this.parametersListPage.idPromotionCurrent=this.currentId;
+                this.urlCustom=this.urlLimit+"?n="+this.currentId;
+                    var ajax=this.$.getPromotionCurrent;
+                    ajax.url=this.urlCustom;
+                    ajax.headers=this.headersCustom;
+                    ajax.method="GET";
+                    ajax.contentType="application/x-www-form-urlencoded";
+                    ajax.withCredentials=true;
+                    ajax.sync=false;
+                    ajax.debounceDuration=300;
+                    ajax.generateRequest();
+            }
+
+            _cleanUrl(urlText){
+                var url=urlText;
+                var parametersUrl=new URL(url);
+                var hostUrl=parametersUrl.host;
+                var pathnameUrl=parametersUrl.pathname;
+                var urlClean="";
+                urlClean='<a href="'+urlText+'" class="colorLink" target="_blank"><paper-button class="custom">'+hostUrl+pathnameUrl+'</paper-button></a>';
+                return urlClean;
+
+                /*var url=document.createElement('a');
+                var urlClean="";
+                url.href=urlText;
+                console.log(url.href); // https://developer.mozilla.org/en-US/search?q=URL#search-results-close-container
+                console.log(url.protocol); // https:
+                console.log(url.host); // developer.mozilla.org
+                console.log(url.hostname); // developer.mozilla.org
+                console.log(url.port); // (blank - https assumes port 443)
+                console.log(url.pathname); // /en-US/search
+                console.log(url.search); // ?q=URL
+                console.log(url.hash); // #search-results-close-container
+                console.log(url.origin); // https://developer.mozilla.org
+                if(url.protocol){
+                    urlClean='<a href="'+urlText+'" target="_blank">'+url.host+url.pathname+'</a>';
+                    return urlClean;
+                }else{
+                    urlClean='<a href="https://'+urlText+'" target="_blank">'+url.host+url.pathname+'</a>';
+                    return urlClean;
+                }*/
+            }
+
+            _didRespond(request){
+
+                //console.log(request.detail.response);
+                var datastorage=request.detail.response.datosapi;
+                var urlPromo=request.detail.response.datosapi[0].promocionTextoUrl;
+                var urlBranchOffice=request.detail.response.datosapi[0].sucursalesUrl;
+                var txt1Current=request.detail.response.datosapi[0].promocionTexto;
+                var txt2Current=request.detail.response.datosapi[0].direccionTexto;
+                var txt3Current=request.detail.response.datosapi[0].schedulesText;
+                var txt4Current="<p>"+request.detail.response.datosapi[0].telefono+"</p>";
+                var txt5Current=request.detail.response.datosapi[0].webPage;
+                //var urlWebPage=this._cleanUrl(txt5Current);
+                var urlWebPage="";
+                (txt5Current!="***")?urlWebPage=this._cleanUrl(txt5Current):urlWebPage=txt5Current;
+                //var urlFacebook=this._cleanUrl(txt6Current);
+                var txt6Current=request.detail.response.datosapi[0].facebook;
+                var urlFacebook="";
+                (txt6Current!="***")?urlFacebook=this._cleanUrl(txt6Current):urlFacebook=txt6Current;
+
+                var txt7Current=request.detail.response.datosapi[0].twitter;
+                //var urlTwitter=this._cleanUrl(txt7Current);
+                var urlTwitter="";
+                (txt7Current!="***")?urlTwitter=this._cleanUrl(txt7Current):urlTwitter=txt7Current;
+
+                var txt8Current=request.detail.response.datosapi[0].email;
+                datastorage.forEach(function (datalist) {
+                    //this.push('storageDataAll', datalist);
+                    this.$.listPromotionFeatures.push('items', datalist);
+                    this.$.listPromotionFeatures.render();
+                }, this);
+                //urlpromotion(urlPromo);
+
+                var txt1=Polymer.dom(this.root).querySelector('.rate-txt1m');
+                var txt2=Polymer.dom(this.root).querySelector('.rate-txt2m');
+                var txt3=Polymer.dom(this.root).querySelector('.rate-txt3m');
+                var txt4=Polymer.dom(this.root).querySelector('.rate-txt4m');
+                var txt5=Polymer.dom(this.root).querySelector('.rate-txt5m');
+                var txt6=Polymer.dom(this.root).querySelector('.rate-txt6m');
+                var txt7=Polymer.dom(this.root).querySelector('.rate-txt7m');
+                var txt8=Polymer.dom(this.root).querySelector('.rate-txt8m');
+
+                //var buttonCoupon=Polymer.dom(this.root).querySelector('.urlCurrentCupon');
+                //var buttonBranchOffice=Polymer.dom(this.root).querySelector('.urlCurrentSucursales');
+                var toolsCards=Polymer.dom(this.root).querySelector('div.contentToolsm');
+                $(toolsCards).empty();
+
+                $(txt1).html(txt1Current);
+                $(txt2).html(txt2Current);
+                $(txt3).html(txt3Current);
+                $(txt4).html(txt4Current);
+                $(txt5).html(urlWebPage);
+                $(txt6).html(urlFacebook);
+                $(txt7).html(urlTwitter);
+                if(txt8Current!="***"){
+                    $(txt8).html('<a href="mailto:'+txt8Current+'" class="colorLink" target="_self"><paper-button class="custom">'+txt8Current+'</paper-button></a>');
+                }else{
+                    $(txt8).html(txt8Current);
+                }
+
+                if(urlBranchOffice!="***"){
+                    $(toolsCards).append('<a href="'+urlBranchOffice+'" target="_blank"><paper-button class="urlCurrentCupon pink" >SUCURSALES</paper-button></a>');
+                }
+
+                if(urlPromo!="***"){
+                    $(toolsCards).append('<a href="'+urlPromo+'" target="_blank"><paper-button class="urlCurrentCupon pink" >CUPÓN</paper-button></a>');
+                }
+
+
+
+                return false;
+
+
+                this.$.scrollTheshold.clearTriggers();
+                /*render data*/
+                //console.log(request.detail.response);
+                datastorage.forEach(function (datalist) {
+                    this.push('storageDataAll', datalist);
+                    this.$.listPromotionFeatures.push('items', datalist);
+                    this.$.listPromotionFeatures.render();
+                }, this);
+                if(!this.datacurrentitem[this.subcurrentId]){
+                    this.datacurrentitem[this.subcurrentId]=[];
+                }
+                this.datacurrentitem[this.subcurrentId].push(this.storageDataAll);
+                this.set('storageDataAll',[]);
+                //console.log(this.datacurrentitem);
+                //console.log(request.detail.response);
+                /*END render data*/
+            }
+
+
+            _getHeaders(customHeader) {
+                return {'Accept': 'application/x-www-form-urlencoded','Authorization': this.customHeader,'cache-control': this.cachecontrol};
+            }
+        }
+        window.customElements.define(PromotionFeaturesMedical.is, PromotionFeaturesMedical);
+    </script>
+</dom-module>

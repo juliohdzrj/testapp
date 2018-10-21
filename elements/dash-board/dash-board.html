@@ -1,0 +1,683 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../elements/font-roboto/roboto.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/app-layout/demo/sample-content.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+
+<link rel="import" href="../../bower_components/polymer/lib/utils/async.html">
+
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+
+<!--Custom Elements-->
+<link rel="import" href="../../elements/custom-icons-set/custom-icons.html">
+<link rel="import" href="../../elements/redcomercial-categorias/redcomercial-categorias.html">
+<link rel="import" href="../../elements/redmedica-categorias/redmedica-categorias.html">
+<link rel="import" href="../../elements/promotion-commercial/promotion-commercial.html">
+<link rel="import" href="../../elements/promotion-medical/promotion-medical.html">
+<link rel="import" href="../../elements/sub-category/sub-category.html">
+<link rel="import" href="../../elements/medicalsub-category/medicalsub-category.html">
+<link rel="import" href="../../elements/subpromotion-commercial/subpromotion-commercial.html">
+<link rel="import" href="../../elements/subpromotion-medical/subpromotion-medical.html">
+<link rel="import" href="../../elements/promotion-features/promotion-features.html">
+<link rel="import" href="../../elements/promotion-featuresmedical/promotion-featuresmedical.html">
+<link rel="import" href="../../elements/medical-directory/medical-directory.html">
+<link rel="import" href="../../elements/location-directorymedical/location-directorymedical.html">
+<link rel="import" href="../../elements/features-dirmedical/features-dirmedical.html">
+<link rel="import" href="../../elements/start-session/start-session.html">
+<link rel="import" href="../../elements/company-agreement/company-agreement.html">
+<link rel="import" href="../../elements/create-account/create-account.html">
+<link rel="import" href="../../elements/restore-account/restore-account.html">
+<!--End Custom Elements-->
+<dom-module id="dash-board">
+    <template>
+        <custom-style>
+            <style is="custom-style">
+                /*body {
+                    margin: 0;
+                    font-family: 'Roboto', 'Noto', sans-serif;
+                    background-color: #eee;
+                }*/
+                :host {
+                    font-family: 'Roboto', 'Noto', sans-serif;
+                    font-size: 16px;
+                }
+
+                app-header {
+                    color: #485156;
+                    background-color: #ffffff;
+                }
+
+                app-header paper-icon-button {
+                    --paper-icon-button-ink-color: red;
+                }
+
+                app-drawer-layout {
+                    --app-drawer-layout-content-transition: margin 0.2s;
+                    /*background-color: #eee;*/
+                    background-color: rgb(250, 250, 250);
+                }
+
+                app-drawer {
+                    --app-drawer-content-container:{
+                        background-color: rgb(245, 245, 245);
+                    }
+                }
+                .drawer-content {
+                    margin-top: 80px;
+                    height: calc(100% - 80px);
+                    overflow: auto
+                }
+                paper-icon-item{
+                    cursor: pointer;
+                    font-size: 0.938em
+                }
+                .focusitem:hover{
+                    background-color: rgb(250, 250, 250);
+                }
+                iron-icon{
+                    color:rgb(136, 136, 136);
+                }
+                div.drawer-content span{
+                    color:rgb(17, 17, 17);
+                }
+                div.drawer-content a{
+                    text-underline: none;
+                    text-decoration-line: none;
+                }
+                div.portada{
+                    background-color: rgb(250, 250, 250); height: 300px
+                }
+                .hideOption{
+                    display: none;
+                }
+                .showOption{
+                    display: block;
+                }
+
+
+
+
+            </style>
+        </custom-style>
+        <app-location route="{{route}}"></app-location>
+        <app-route
+                route="{{route}}"
+                pattern="/:page"
+                data="{{routeData}}"
+                tail="{{subroute}}">
+        </app-route>
+        <app-route
+                route="{{subroute}}"
+                pattern="/:subpage"
+                data="{{subrouteData}}">
+        </app-route>
+        <app-header-layout>
+
+            <app-header fixed shadow slot="header">
+                <app-toolbar>
+                    <paper-icon-button id="toggle" icon="menu" on-tap="_togleMenu" drawer-toggle></paper-icon-button>
+                    <div main-title><img src="images/logo-smb.svg" width="100px" height="42px" alt="Logo Tarjeta SMB"></div>
+
+                    [[edoLog]]
+                    <paper-menu-button horizontal-align="right">
+                        <paper-icon-button icon="account-circle" role="button" slot="dropdown-trigger" tabindex="0" aria-disabled="false"></paper-icon-button>
+                        <!--paper-icon-button icon="menu" slot="dropdown-trigger"></paper-icon-button-->
+                        <paper-listbox slot="dropdown-content">
+                            <a class$="[[loginOptionEdo]]" href="https://app.servicioshuman.mx/iniciar-session"><paper-item>Iniciar sesión</paper-item></a>
+                            <a class$="[[logoutOptionEdo]]" href="#"><paper-item>Cerrar sesión</paper-item></a>
+                        </paper-listbox>
+                    </paper-menu-button>
+
+
+                </app-toolbar>
+            </app-header>
+
+            <app-drawer-layout id="drawerLayout">
+
+                <app-drawer id="drawer" slot="drawer">
+                    <div class="drawer-content">
+                        <a href="https://app.servicioshuman.mx/inicio">
+                            <paper-icon-item id="inicio" class="focusitem">
+                                <iron-icon icon="icons:home" slot="item-icon" class="focuseironicon"></iron-icon> <span class="focusespan">Inicio</span>
+                            </paper-icon-item>
+                        </a>
+                        <a href="https://app.servicioshuman.mx/red-comercial">
+                            <paper-icon-item id="red-comercial" class="focusitem">
+                                <iron-icon icon="custom-icons:icon-redcomercial" slot="item-icon" class="focuseironicon"></iron-icon> <span class="focusespan">Red comercial</span>
+                            </paper-icon-item>
+                        </a>
+                        <a href="https://app.servicioshuman.mx/red-medica">
+                            <paper-icon-item id="red-medica" class="focusitem">
+                                <iron-icon icon="custom-icons:icon-redmedica" slot="item-icon" class="focuseironicon"></iron-icon> <span class="focusespan">Red médica</span>
+                            </paper-icon-item>
+                        </a>
+                        <a href="https://app.servicioshuman.mx/directorio-medico">
+                            <paper-icon-item id="directorio-medico" class="focusitem">
+                                <iron-icon icon="custom-icons:icon-directoriomedico" slot="item-icon" class="focuseironicon"></iron-icon> <span class="focusespan">Directorio Médico</span>
+                            </paper-icon-item>
+                        </a>
+
+
+
+                        <paper-icon-item onclick="openCreatePostModal()" class="focusitem">
+                            <iron-icon icon="inbox" slot="item-icon"></iron-icon> <span>Test banner</span>
+                        </paper-icon-item>
+
+                        <!--paper-icon-item onclick="openCreatePostModal()" class="focusitem">
+                            <iron-icon icon="inbox" slot="item-icon"></iron-icon> <span>{{recorte}}</span>
+                        </paper-icon-item-->
+                    </div>
+                </app-drawer>
+
+                <neon-animated-pages selected$="[[routeData.page]]" role="main" id="pages" attr-for-selected="data-route" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+                    <div class="portada" data-route="inicio">PORTADA</div>
+
+                    <category-commercial listcategorycommercial="{{listcategorycommercial}}" data-route="red-comercial"></category-commercial>
+                    <category-medical listcategorymedical="{{listcategorymedical}}" data-route="red-medica"></category-medical>
+
+                    <sub-category listcategorycommercial="{{listcategorycommercial}}" pagecurrent="{{routeData.page}}" idcategoria="[[categoryId]]" namecategory="[[nameCategory]]" data-route="categoria"></sub-category>
+                    <medicalsub-category listcategorymedical="{{listcategorymedical}}" pagecurrent="{{routeData.page}}" idcategoria="[[categoryId]]" namecategory="[[nameCategory]]" data-route="especialidades-medicas"></medicalsub-category>
+
+                    <promotion-medical listcategorymedical="{{listcategorymedicalcurrent}}" idcategoria="[[categoryId]]" namecategory="[[nameCategory]]" data-route="consulta-medica"></promotion-medical>
+                    <promotion-commercial listcategorycommercial="{{listcategorycommercialcurrent}}" idcategoria="[[categoryId]]" namecategory="[[nameCategory]]" data-route="promociones"></promotion-commercial>
+
+
+                    <subpromotion-commercial listcategorycommercial="{{listcategorycommercialcurrent}}" idcategoria="[[categoryId]]" namecategory="[[nameCategory]]" data-route="promociones-smb"></subpromotion-commercial>
+                    <subpromotion-medical listcategorymedical="{{listcategorymedicalcurrent}}" idcategoria="[[categoryId]]" namecategory="[[nameCategory]]" data-route="descuento-consulta-medica"></subpromotion-medical>
+
+
+                    <promotion-features listcategorycommercial="{{listcategorycommercialcurrent}}" data-route="promotionfeatures" namecategory="[[nameCategory]]" idcategoria="[[categoryId]]"></promotion-features>
+                    <promotion-featuresmedical listcategorymedical="{{listcategorymedicalcurrent}}" data-route="promotionfeaturesmedical" namecategory="[[nameCategory]]" idcategoria="[[categoryId]]"></promotion-featuresmedical>
+
+
+
+                    <features-dirmedical data-route="dirmedicalfeatures" idcategoria="[[categoryId]]"></features-dirmedical>
+
+
+
+                    <medical-directory class="directoriomedico" data-route="directorio-medico"></medical-directory>
+                    <location-directorymedical data-route="localidad-directorio-medico"></location-directorymedical>
+
+                    <start-session edo-Log="{{edoLog}}" data-route="iniciar-session"></start-session>
+                    <company-agreement edo-Log="{{edoLog}}" data-route="convenio-empresa"></company-agreement>
+                    <create-account edo-Log="{{edoLog}}" data-route="registrar-usuario"></create-account>
+                    <restore-account edo-Log="{{edoLog}}" data-route="recuperar-cuenta"></restore-account>
+
+                    <!--div class="directoriomedico" data-route="directorio-medico">Directorio Médico</div-->
+
+                    <!--promotion-commercial listcategorycommercial="{{listcategorycommercialcurrent}}" idcategoria="[[categoryId]]" valuerange="[[rangeCategory]]" namecategory="[[nameCategory]]" data-route="promociones"></promotion-commercial-->
+                    <!--promotion-subcommercial recorte="{{recortedos}}" idcategoria="[[categoryId]]" valuerange="[[rangeCategory]]" namecategory="[[nameCategory]]" data-route="promociones-smb"></promotion-subcommercial-->
+                </neon-animated-pages>
+            </app-drawer-layout>
+
+        </app-header-layout>
+    </template>
+    <script>
+        class DashBoard extends Polymer.Element{
+            static get is(){ return 'dash-board' }
+            static get properties(){
+                return{
+                    loginOptionEdo:{
+                        type: String,
+                        value:"showOption"
+                    },
+                    logoutOptionEdo:{
+                        type: String,
+                        value:"hideOption"
+                    },
+                    edoLog: {
+                        type: String,
+                        value:"nologin",
+                        observer: 'edoLogUpdated'
+                    },
+                    valenter:{
+                        type:String,
+                        value:"false"
+                    },
+                    listcategorycommercial: {
+                        type: Object,
+                        value:"ok",
+                        observer: 'vallistcategorycommercial'
+                    },
+                    listcategorycommercialcurrent: {
+                        type: Object,
+                        value:"ok"
+                    },
+                    listcategorymedical: {
+                        type: Object,
+                        value:"ok",
+                        observer: 'vallistcategorymedical'
+                    },
+                    listcategorymedicalcurrent: {
+                        type: Object,
+                        value:"ok"
+                    },
+                    /*rangeCategory:{
+                        type:Number
+                    },*/
+                    categoryId:{
+                        type:Object
+                    },
+                    nameCategory:{
+                        type:Text
+                    },
+                    route: {
+                        type:Object,
+                        notify:true,
+                        observer:"_setId"
+                    },
+                    routeData:{
+                        type:Object,
+                        notify:true
+                    },
+                    subroute:Object,
+                    subrouteData:Object,
+                    idpage:{
+                        type:Object,
+                        computed:'_getIdPage(routeData)'
+                    }
+
+                    /*example:{
+                        type: Array,
+                        value:[
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            },
+                            {
+                                code:'BTC',
+                                name:'Bitcoin'
+                            },
+                            {
+                                code:'ETH',
+                                name:'Ethereum'
+                            },
+                            {
+                                code:'LTC',
+                                name:'Litecoin'
+                            }
+                        ]
+                    }*/
+                }
+            }
+            ready(){
+                super.ready();
+                if(this.routeData.page==""){
+                    this.$.pages.selected="inicio";
+                }
+                console.log(this.routeData.page);
+                //this.routeData.page="inicio";
+                /*console.log(this.route);
+                console.log(this.routeData);
+                console.log(this.subroute);
+                console.log(this.subrouteData);
+                console.log(this.route.__queryParams);*/
+            }
+
+            edoLogUpdated(newval){
+                this.edoLog=newval;
+                if(this.edoLog==="loginok"){
+                    this.logoutOptionEdo="showOption";
+                    this.loginOptionEdo="hideOption";
+                }
+
+                console.log(this.edoLog);
+            }
+
+            vallistcategorycommercial(newval){
+                //console.log(newval);
+                this.listcategorycommercialcurrent=newval;
+            }
+            vallistcategorymedical(newval){
+                //console.log(newval);
+                this.listcategorymedicalcurrent=newval;
+            }
+            _togleMenu(){
+                //this.$.drawer.toggle();
+                if (this.$.drawerLayout.forceNarrow || !this.$.drawerLayout.narrow) {
+                    this.$.drawerLayout.forceNarrow = !this.$.drawerLayout.forceNarrow;
+                } else {
+                    this.$.drawerLayout.drawer.toggle();
+                }
+            }
+            _setId(){
+                if(this.route.__queryParams.n!=undefined){
+                    this.categoryId=this.route.__queryParams;
+                }
+                if(this.route.__queryParams.m!=undefined){
+                    this.nameCategory=this.route.__queryParams.m;
+                }
+                //if(this.route.__queryParams.t!=undefined){
+                    //this.rangeCategory=this.route.__queryParams.t;
+                //}
+
+                //console.log(this.categoryId);
+                //console.log(this.namecategory);
+                //console.log(this.route);
+                //console.log(this.route.__queryParams.n);
+                //console.log(this.route.__queryParams.m);
+            }
+            _getIdPage(infoPage){
+                console.log(infoPage);
+
+                if(infoPage.page){
+                    var currentPagePromotion="";
+                    if(infoPage.page==="promociones"||infoPage.page==="consulta-medica"||infoPage.page==="localidad-directorio-medico"||infoPage.page==="especialidades-medicas"||infoPage.page==="descuento-consulta-medica"||infoPage.page==="iniciar-session"||infoPage.page==="convenio-empresa"||infoPage.page==="registrar-usuario"||infoPage.page==="recuperar-cuenta"){
+                        return false;
+                    }
+                    if(infoPage.page==="categoria"){
+                        return false;
+                    }
+                    if(infoPage.page==="promociones-smb"){
+                        return false;
+                    }
+                    if(currentPagePromotion=infoPage.page.split("-")){
+                        if(currentPagePromotion[0]==="promocion"){
+
+                            this.routeData.page="promotionfeatures";
+                            //this.$.pages.selectIndex(6);
+                            //this.$.pages.selectIndex(6);
+                            //console.log('sendpage');
+                            return false;
+                        }
+                        if(currentPagePromotion[0]==="descuento"){
+                            this.routeData.page="promotionfeaturesmedical";
+                            //this.$.pages.selectIndex(6);
+                            //this.$.pages.selectIndex(6);
+                            //console.log('sendpage');
+                            return false;
+                        }
+                        if(currentPagePromotion[0]==="especialidad"){
+                            this.routeData.page="dirmedicalfeatures";
+                            return false;
+                        }
+
+                        /*if(currentPagePromotion[0]=="consulta"){
+
+                            this.routeData.page="consulta-medica";
+                            //this.$.pages.selectIndex(6);
+                            //this.$.pages.selectIndex(6);
+                            console.log('sendpage2');
+                            return false;
+                        }*/
+                    }
+                }
+
+
+
+                //Polymer.dom(this.root).querySelector(".focusitem iron-icon").style.color="rgb(136, 136, 136)";
+                //Polymer.dom(this.root).querySelector(".focusitem span").style.fontWeight="normal";
+                var elementSelect=this.$.drawer.querySelectorAll(".focusitem");
+                var elementSelect1=this.$.drawer.querySelectorAll(".focuseironicon");
+                var elementSelect2=this.$.drawer.querySelectorAll(".focusespan");
+                //var numelements=elementSelect.length;
+
+                elementSelect.forEach(function(elem, index) {
+                    elementSelect[index].style.backgroundColor="transparent";
+                });
+                elementSelect1.forEach(function(elem, index) {
+                    elementSelect1[index].style.color="rgb(136, 136, 136)";
+                });
+                elementSelect2.forEach(function(elem, index) {
+                    elementSelect2[index].style.fontWeight="normal";
+                });
+                //console.log(infoPage);
+                //console.log(ruta);
+                console.log(infoPage.page);
+                if(infoPage.page==undefined||infoPage.page==""){
+                    Polymer.dom(this.root).querySelector("#inicio").style.backgroundColor="rgb(220, 220, 220)";
+                    Polymer.dom(this.root).querySelector("#inicio iron-icon").style.color="rgb(32, 98, 175)";
+                    Polymer.dom(this.root).querySelector("#inicio span").style.fontWeight="500";
+                }else{
+                    console.log(infoPage.page);
+                Polymer.dom(this.root).querySelector("#"+infoPage.page).style.backgroundColor="rgb(220, 220, 220)";
+                Polymer.dom(this.root).querySelector("#"+infoPage.page+" iron-icon").style.color="rgb(32, 98, 175)";
+                Polymer.dom(this.root).querySelector("#"+infoPage.page+" span").style.fontWeight="500";
+                }
+                //if(infoPage.page==""){
+                //    Polymer.dom(this.root).querySelector("#inicio").style.backgroundColor="rgb(220, 220, 220)";
+                 //   Polymer.dom(this.root).querySelector("#inicio iron-icon").style.color="rgb(32, 98, 175)";
+
+                //}else{
+                    //Polymer.dom(this.root).querySelector("#"+infoPage.page).style.backgroundColor="rgb(220, 220, 220)";
+                    //Polymer.dom(this.root).querySelector("#"+infoPage.page+" iron-icon").style.color="rgb(32, 98, 175)";
+                    //Polymer.dom(this.root).querySelector("#"+infoPage.page+" span").style.fontWeight="600";
+                //}
+
+                //Polymer.dom(this.root).querySelector("#"+infoPage).target.style.backgroundColor="rgb(84, 79, 102)";
+                //console.log(Polymer.dom(this.root).querySelector("#"+infoPage));
+                //document.getElementById(""+infoPage).style.backgroundColor="rgb(84, 79, 102)";
+                //this.$$('#'+infoPage).target.style.backgroundColor="rgb(84, 79, 102)";
+
+
+                /*for(i=0;i<numelements;i++){
+                    elementSelect[i].style.backgroundColor="#423c57";
+                    elementSelect[i].style.color="#d9d9d9";
+                }*/
+                //e.path[0].style.backgroundColor="rgb(84, 79, 102)";
+                //e.path[0].style.color="#ffffff";
+
+                //this.$$('#drawer').target.style.backgroundColor="rgb(84, 79, 102)";
+                //e.target.style.color="#ffffff";
+            }
+        }
+        window.customElements.define(DashBoard.is, DashBoard);
+    </script>
+</dom-module>
+
+<!--script>
+    var drawerLayout = document.getElementById('drawerLayout');
+    toggle.addEventListener('click', function() {
+        if (drawerLayout.forceNarrow || !drawerLayout.narrow) {
+            drawerLayout.forceNarrow = !drawerLayout.forceNarrow;
+        } else {
+            drawerLayout.drawer.toggle();
+        }
+    });
+</script-->
+
+
+<!--dom-module id="dash-board">
+    <template>
+        <h2>Hello</h2>
+    </template>
+    <script>
+        class DashBoard extends Polymer.Element{
+            static get is(){ return 'dash-board' }
+        }
+        window.customElements.define(DashBoard.is, DashBoard);
+    </script>
+</dom-module-->

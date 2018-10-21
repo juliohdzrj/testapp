@@ -1,0 +1,16 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<dom-module id="shared-styles">
+    <template>
+        <style>
+        </style>
+    </template>
+    <script>
+        class SharedStyles extends Polymer.Element{
+            static get is(){ return 'shared-styles' }
+            ready(){
+                super.ready();
+            }
+        }
+        window.customElements.define(SharedStyles.is, SharedStyles);
+    </script>
+</dom-module>
